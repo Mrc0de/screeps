@@ -3,6 +3,7 @@ module.exports.loop = function () {
     //declare role definitions
     var roleHarvester = require('role.harvester');
     var roleUpgrader = require('role.upgrader');
+    var baseBuilder = require('role.baseBuilder');
     var spBasic = require('spawnBasic.sp');
     
     //Collect Roled Creeps
@@ -15,6 +16,8 @@ module.exports.loop = function () {
             roleHarvester.run(cr);
         } else if(cr.memory.role == 'upgrader') {
             roleUpgrader.run(cr);
+        } else if(cr.memory.role == 'baseBuilder') {
+            baseBuilder.run(cr);
         }
     }
     

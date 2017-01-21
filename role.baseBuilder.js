@@ -1,10 +1,9 @@
-// The Upgrader (Alpha)
+// The baseBuilder (Alpha)
 module.exports = {
     run(creep) {
-       
         if (!creep.memory['state'] ) {
-            // creep.say('Harvest');
-            creep.memory['state'] = 'Harvest';
+            // creep.say('HarvestNow');
+            creep.memory['state'] = 'HarvestNow';
         } else {
             // creep.say(creep.memory['state']);
         }
@@ -13,32 +12,32 @@ module.exports = {
         ////////////////
         //State Machinez
         switch(state) {
-            case 'Harvest': {
+            case 'HarvestNow': {
                 // console.log(creep.name + " Is Carrying: "+_.sum(creep.carry)+" Total Of Max "+creep.carryCapacity);
                 if ( _.sum(creep.carry) < creep.carryCapacity) {
-                    // console.log(creep.name + " Empty!");
                     var sources = creep.room.find(FIND_SOURCES);
                     if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
                        creep.moveTo(sources[0]);
-                    //   creep.say("goHarvest");
+                       //creep.say("goHarvest");
                     }
                 } else  if ( _.sum(creep.carry) == creep.carryCapacity) {
                     // We are FULL.
-                    // creep.say('upgrade');
-                    creep.memory['state'] = 'upgradeController';
+                    // creep.say('buildNow');
+                    creep.memory['state'] = 'buildNow';
                 }
                 break;
             }
-            case 'upgradeController': {
-                var roomControllers = creep.room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_CONTROLLER } } );
-                // console.log('Creeps Room has '+roomControllers.length+' Spawns available');
-                if(creep.upgradeController(roomControllers[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(roomControllers[0]);
-                    // creep.say("goUpgrade");
+            case 'buildNow': {
+                var roomConstructionSites = creep.room.find(FIND_MY_CONSTRUCTION_SITES);
+                console.log(creep.name+': My Current Room has '+roomConstructionSites.length+' Construction Sites.');
+                if(creep.build(roomConstructionSites[0]) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(roomConstructionSites[0]);
+                    // creep.say("goBuild");
                 }
-                if ( _.sum(creep.carry) == 0 ) { creep.memory.state = 'Harvest';creep.say('More!');}
+                if ( _.sum(creep.carry) == 0 ) { creep.memory.state = 'HarvestNow';creep.say('I\'m Empty!');}
                 break;
             }
+            default: { creep.memory.state = 'HarvestNow';break;}
         }
         //
         // End Switch(state)

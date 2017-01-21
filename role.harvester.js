@@ -1,12 +1,12 @@
 // The Harvester (Alpha)
 module.exports = {
     run(creep) {
-        creep.say(creep.name);    //tard mode
+     
         if (!creep.memory['state'] ) {
-            creep.say('Harvest');
+            // creep.say('Harvest');
             creep.memory['state'] = 'Harvest';
         } else {
-            creep.say(creep.memory['state']);
+            // creep.say(creep.memory['state']);
         }
         var state = creep.memory['state'];
         
@@ -21,7 +21,7 @@ module.exports = {
                     var sources = creep.room.find(FIND_SOURCES);
                     if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
                        creep.moveTo(sources[0]);
-                       creep.say("goHarvest");
+                    //   creep.say("goHarvest");
                     }
                 } else {
                     // We are FULL.
@@ -29,7 +29,7 @@ module.exports = {
                     // console.log('Creeps Room has '+roomSpawns.length+' Spawns available');
                     if(creep.transfer(roomSpawns[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(roomSpawns[0]);
-                        creep.say("goSpwnDROP");
+                        // creep.say("goSpwnDROP");
                     } 
                     
                 }
