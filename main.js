@@ -9,6 +9,15 @@ module.exports.loop = function () {
     //Collect Roled Creeps
     var harvesters = _.filter( Game.creeps, { memory: {role: 'harvester'} } );
     
+    for(var ded in Game.creeps) {
+        // Leaking only allowed when Wikis do it.
+        if(!Game.creeps[ded]) {
+            //Prevent memory leaks
+            console.log("Burying "+Game.creeps[ded].name);
+            delete Memory.creeps[ded];
+        }
+    }
+    
     //creepyLoop 
     for(var c in Game.creeps) {
         var cr = Game.creeps[c];

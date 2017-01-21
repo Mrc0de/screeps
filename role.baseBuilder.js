@@ -29,7 +29,7 @@ module.exports = {
             }
             case 'buildNow': {
                 var roomConstructionSites = creep.room.find(FIND_MY_CONSTRUCTION_SITES);
-                console.log(creep.name+': My Current Room has '+roomConstructionSites.length+' Construction Sites.');
+                // console.log(creep.name+': My Current Room has '+roomConstructionSites.length+' Construction Sites.');
                 if(creep.build(roomConstructionSites[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(roomConstructionSites[0]);
                     // creep.say("goBuild");
