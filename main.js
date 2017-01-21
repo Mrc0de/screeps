@@ -3,7 +3,7 @@ module.exports.loop = function () {
         if(!Game.creeps[name]) {
             delete Memory.creeps[name];
             console.log('Buried ' + name + '. They were dead.');
-            Game.notify('Buried ' + name + '. They were dead.',5);
+            // Game.notify('Buried ' + name + '. They were dead.',5);
         }
     }
     
