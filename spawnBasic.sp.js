@@ -6,7 +6,7 @@ module.exports = {
             console.log(StructureSpawn.name +": Energy/Max - "+StructureSpawn.energy+'/'+StructureSpawn.energyCapacity);
             console.log(StructureSpawn.name +": Full");
             for(var creepz in Game.creeps) {
-                console.log(creepz + " Will Die In " + creepz.ticksToLive);
+                console.log(creepz + " Will Die In " +Game.creeps[creepz].ticksToLive);
             }
             var harvestersThisRoom = Game.rooms[StructureSpawn.room.name].find(FIND_MY_CREEPS,{filter: { memory :{ role: 'harvester'} }}).length;
             var upgradersThisRoom = Game.rooms[StructureSpawn.room.name].find(FIND_MY_CREEPS,{filter: { memory :{ role: 'upgrader'} }}).length;
