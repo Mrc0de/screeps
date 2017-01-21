@@ -67,15 +67,21 @@ module.exports = {
                 var diff = (r - chosen.energy);
                 // console.log("Difference: "+diff);
                 // console.log("r = "+ r+" chosen = "+chosen.energy);
-                if ((r > chosen.energy) && diff > 50) {
+                if ((r > chosen.energy) && Math.abs(diff) > 50) {
+                    var oldChoice = chosen;
                     chosen = targets[t];
-                    // console.log("Choosing: "+chosen+" over " +targets[t]);
+                    // console.log("Choosing: "+chosen+" over " +oldChoice);
                 } else if ( r == chosen.energy) {
+                    var oldChoice=chosen;
                     chosen = chooseClosest(targets,creep);
-                    // console.log("Choosing: "+chosen+" over " +targets[t]+" (EQUAL)");
+                    // console.log("Choosing: "+chosen+" over " +oldChoice+" (EQUAL so Closest)");
+                } else if ( r < chosen.energy) {
+                    // chosen = chosen;
+                    // console.log("Choosing: "+chosen+" over " +targets[t]+" (Has More)");
                 } else {
+                    var oldChoice = chosen;
                     chosen = chooseClosest(targets,creep);
-                    // console.log("Choosing: "+chosen+" over " +targets[t]+" (Closest)");
+                    // console.log("Choosing: "+chosen+" over " +oldChoice+" (Defaulted to Closest)");
                 }
             }
             // console.log(chosen+" Has The Most Energy: "+chosen.energy);
