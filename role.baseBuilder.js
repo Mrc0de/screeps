@@ -68,9 +68,16 @@ module.exports = {
                 // console.log("Difference: "+diff);
                 // console.log("r = "+ r+" chosen = "+chosen.energy);
                 if ((r > chosen.energy) && Math.abs(diff) > 50) {
-                    var oldChoice = chosen;
-                    chosen = targets[t];
-                    // console.log("Choosing: "+chosen+" over " +oldChoice);
+                   if ( _.sum(creep.carry) == 0 ) {
+                        var oldChoice = chosen;
+                        chosen = targets[t];
+                        // console.log("Choosing: "+chosen+" over " +oldChoice);
+                    } else {
+                        //stay here with CLOSEST
+                        var oldChoice = chosen;
+                        chosen = chooseClosest(targets,creep);
+                        // console.log("Staying: "+chosen+" oldChoice: " +oldChoice);
+                    }
                 } else if ( r == chosen.energy) {
                     var oldChoice=chosen;
                     chosen = chooseClosest(targets,creep);
