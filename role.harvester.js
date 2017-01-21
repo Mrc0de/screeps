@@ -19,7 +19,7 @@ module.exports = {
                 if ( _.sum(creep.carry) < creep.carryCapacity ) {
                     // console.log(creep.name + " NEEDS MORE!");
                     var sources = creep.room.find(FIND_SOURCES);
-                    var thisSource = chooseMostEnergy(sources);
+                    var thisSource = chooseMostEnergy(sources,creep);
                     if(creep.harvest(thisSource) == ERR_NOT_IN_RANGE) {
                        creep.moveTo(thisSource );
                     //   creep.say("goHarvest");
@@ -53,18 +53,22 @@ module.exports = {
             // console.log(chosen+" is closest");
             return chosen;
         }
-        function chooseMostEnergy(targets) {
+        function chooseMostEnergy(targets,creep) {
             chosen = targets[0];
             for(var t in targets) {
                 // console.log(JSON.stringify(targets));
                 // console.log(targets[t]);
                 var r = targets[t].energy;
-                if (r > chosen.energy) {
+                var diff = Math.abs(r - targets[t].energy);
+                if (r > chosen.energy && diff > creep.energyCapacity ) {
                     chosen = targets[t];
+                } else if ( r == chosen.energy) {
+                    chosen = chooseClosest(targets,creep);
+                } else {
+                    chosen = chooseClosest(targets,creep);
                 }
             }
             // console.log(chosen+" Has The Most Energy: "+chosen.energy);
-            
             return chosen;
         }
     }
