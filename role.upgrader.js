@@ -19,9 +19,20 @@ module.exports = {
                     // console.log(creep.name + " Empty!");
                     var sources = creep.room.find(FIND_SOURCES);
                     var bestSource = chooseMostEnergy(sources,creep);
-                    if(creep.harvest(bestSource) == ERR_NOT_IN_RANGE) {
-                       creep.moveTo(bestSource);
-                    //   creep.say("goHarvest");
+                    var roomContainers = Game.rooms[creep.room.name].find(FIND_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_CONTAINER && structure.store.energy > 50 )) } });
+                    // console.log("Containers: "+ roomContainers.length);
+                    roomContainers.push(bestSource);
+                    var bestest = (chooseClosest(roomContainers,creep));
+                    // console.log(creep.name+": Bestest: "+ bestest);
+                    if (bestest.structureType != STRUCTURE_CONTAINER) {
+                        if(creep.harvest(bestest) == ERR_NOT_IN_RANGE) {
+                           creep.moveTo(bestest);
+                        //   creep.say("goHarvest");
+                        } 
+                    } else {
+                        if( bestest.transfer(creep,RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(bestest);
+                        }
                     }
                 } else  if ( _.sum(creep.carry) == creep.carryCapacity) {
                     // We are FULL.

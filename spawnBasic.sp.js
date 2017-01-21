@@ -1,7 +1,8 @@
 // Spawn Basic dot sp (spawn)
 module.exports = {
     run(StructureSpawn) {
-        if (StructureSpawn.energy >= (StructureSpawn.energyCapacity * 1) ) {
+        // console.log(StructureSpawn.room.energyAvailable);
+        if (StructureSpawn.room.energyAvailable >= (StructureSpawn.energyCapacity * 1) ) {
             // console.log(StructureSpawn.name +": Spawn Report");
             // console.log(StructureSpawn.name +": Energy/Max - "+StructureSpawn.energy+'/'+StructureSpawn.energyCapacity);
             // console.log(StructureSpawn.name +": Full");
