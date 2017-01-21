@@ -20,6 +20,10 @@ module.exports = {
             } else if ( StructureSpawn.canCreateCreep([WORK,MOVE,CARRY,MOVE,MOVE]) == OK && StructureSpawn.spawning == null && baseBuildersThisRoom < 4 ) {
                 console.log(StructureSpawn.name +": Creating baseBuilder Role Creep");
                 StructureSpawn.createCreep([WORK,MOVE,CARRY,MOVE,MOVE],null,{role:'baseBuilder'});
+            } else if ( StructureSpawn.canCreateCreep([WORK,WORK,CARRY,MOVE,MOVE,MOVE]) == OK && StructureSpawn.spawning == null && baseBuildersThisRoom < 7 ) {
+                //baseBuilderTURBO
+                console.log(StructureSpawn.name +": Creating baseBuilder (e400Faster) Role Creep");
+                StructureSpawn.createCreep([WORK,WORK,CARRY,MOVE,MOVE,MOVE],null,{role:'baseBuilder'});
             } else {
                 // console.log(StructureSpawn.name + ": Not making a damn thing..");
             }

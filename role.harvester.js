@@ -25,8 +25,8 @@ module.exports = {
                     }
                 } else {
                     // We are FULL.
-                    var roomSpawns = creep.room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_SPAWN } } );
-                    // console.log('Creeps Room has '+roomSpawns.length+' Spawns available');
+                    var roomSpawns = creep.room.find(FIND_MY_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN)  && structure.energy < structure.energyCapacity)}});
+                    // console.log('Creeps Room has '+roomSpawns.length+' Non Full Spawns/Exts available');
                     if(creep.transfer(roomSpawns[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(roomSpawns[0]);
                         // creep.say("goSpwnDROP");
