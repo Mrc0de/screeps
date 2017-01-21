@@ -12,9 +12,9 @@ module.exports = {
             var upgradersThisRoom = Game.rooms[StructureSpawn.room.name].find(FIND_MY_CREEPS,{filter: { memory :{ role: 'upgrader'} }}).length;
             var baseBuildersThisRoom = Game.rooms[StructureSpawn.room.name].find(FIND_MY_CREEPS,{filter: { memory :{ role: 'baseBuilder'} }}).length;
             // console.log("Structure Room: " + StructureSpawn.room.name );
-            // console.log("Harvesters in this room: "+ harvestersThisRoom);
-            // console.log("Upgraders in this room: "+ upgradersThisRoom);
-            // console.log("Builders in this room: "+ baseBuildersThisRoom);
+            console.log("Harvesters in this room: "+ harvestersThisRoom);
+            console.log("Upgraders in this room: "+ upgradersThisRoom);
+            console.log("Builders in this room: "+ baseBuildersThisRoom);
             if ( StructureSpawn.canCreateCreep([WORK,CARRY,CARRY,MOVE,MOVE]) == OK && StructureSpawn.spawning == null && harvestersThisRoom < 6 ) {
                 console.log(StructureSpawn.name +": Creating Harvester Role Creep ("+harvestersThisRoom+ " Exist)");
                 StructureSpawn.createCreep([WORK,CARRY,CARRY,MOVE,MOVE],null,{role:'harvester'});

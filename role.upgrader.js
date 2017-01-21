@@ -60,16 +60,23 @@ module.exports = {
         function chooseMostEnergy(targets,creep) {
             chosen = targets[0];
             for(var t in targets) {
+                if ( targets[t].id  == chosen.id   ) {continue;}
+                // console.log(chosen + "vs" + targets[t]);
                 // console.log(JSON.stringify(targets));
                 // console.log(targets[t]);
                 var r = targets[t].energy;
-                var diff = Math.abs(r - targets[t].energy);
-                if (r > chosen.energy && diff > creep.energyCapacity ) {
+                var diff = (r - chosen.energy);
+                // console.log("Difference: "+diff);
+                // console.log("r = "+ r+" chosen = "+chosen.energy);
+                if ((r > chosen.energy) && diff > 50) {
                     chosen = targets[t];
+                    // console.log("Choosing: "+chosen+" over " +targets[t]);
                 } else if ( r == chosen.energy) {
                     chosen = chooseClosest(targets,creep);
+                    // console.log("Choosing: "+chosen+" over " +targets[t]+" (EQUAL)");
                 } else {
                     chosen = chooseClosest(targets,creep);
+                    // console.log("Choosing: "+chosen+" over " +targets[t]+" (Closest)");
                 }
             }
             // console.log(chosen+" Has The Most Energy: "+chosen.energy);
