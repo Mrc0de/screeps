@@ -21,7 +21,7 @@ module.exports = {
             } else if ( StructureSpawn.canCreateCreep([WORK,CARRY,CARRY,MOVE,MOVE]) == OK && StructureSpawn.spawning == null && upgradersThisRoom < 6 ) {
                 console.log(StructureSpawn.name +": Creating Upgrader Role Creep");
                 StructureSpawn.createCreep([WORK,CARRY,CARRY,MOVE,MOVE],null,{role:'upgrader'});
-            } else if ( StructureSpawn.canCreateCreep([WORK,MOVE,CARRY,MOVE,MOVE]) == OK && StructureSpawn.spawning == null && baseBuildersThisRoom < 4 ) {
+            } else if ( StructureSpawn.canCreateCreep([WORK,MOVE,CARRY,MOVE,MOVE]) == OK && StructureSpawn.spawning == null && baseBuildersThisRoom < 7 ) {
                 console.log(StructureSpawn.name +": Creating baseBuilder Role Creep");
                 StructureSpawn.createCreep([WORK,MOVE,CARRY,MOVE,MOVE],null,{role:'baseBuilder'});
             } else if ( StructureSpawn.canCreateCreep([WORK,WORK,CARRY,MOVE,MOVE,MOVE]) == OK && StructureSpawn.spawning == null && baseBuildersThisRoom < 10 ) {

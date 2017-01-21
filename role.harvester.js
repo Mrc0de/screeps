@@ -19,16 +19,18 @@ module.exports = {
                 if ( _.sum(creep.carry) < creep.carryCapacity ) {
                     // console.log(creep.name + " NEEDS MORE!");
                     var sources = creep.room.find(FIND_SOURCES);
-                    if(creep.harvest(chooseMostEnergy(sources)) == ERR_NOT_IN_RANGE) {
-                       creep.moveTo(chooseMostEnergy(sources));
+                    var thisSource = chooseMostEnergy(sources);
+                    if(creep.harvest(thisSource) == ERR_NOT_IN_RANGE) {
+                       creep.moveTo(thisSource );
                     //   creep.say("goHarvest");
                     }
                 } else {
                     // We are FULL.
-                    var roomSpawns = creep.room.find(FIND_MY_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN)  && structure.energy < structure.energyCapacity)}});
+                    var roomSpawns = creep.room.find(FIND_MY_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_STORAGE || structure.structureType == STRUCTURE_CONTAINER)  && (structure.energy < structure.energyCapacity || structure.storage < structure.storeCapacity ))}});
                     // console.log('Creeps Room has '+roomSpawns.length+' Non Full Spawns/Exts available');
-                    if(creep.transfer(chooseClosest(roomSpawns,creep), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(chooseClosest(roomSpawns,creep));
+                    var thisOneClosest = chooseClosest(roomSpawns,creep);
+                    if(creep.transfer(thisOneClosest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(thisOneClosest);
                         // creep.say("goSpwnDROP");
                     } 
                     
@@ -65,9 +67,6 @@ module.exports = {
             
             return chosen;
         }
-    },
-    pr(creep) {
-        creep.say("PRHI");
     }
     
 };
