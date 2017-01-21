@@ -18,8 +18,9 @@ module.exports = {
                 if ( _.sum(creep.carry) < creep.carryCapacity) {
                     // console.log(creep.name + " Empty!");
                     var sources = creep.room.find(FIND_SOURCES);
-                    if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                       creep.moveTo(sources[0]);
+                    var bestSource = chooseMostEnergy(sources,creep);
+                    if(creep.harvest(bestSource) == ERR_NOT_IN_RANGE) {
+                       creep.moveTo(bestSource);
                     //   creep.say("goHarvest");
                     }
                 } else  if ( _.sum(creep.carry) == creep.carryCapacity) {
@@ -32,8 +33,9 @@ module.exports = {
             case 'upgradeController': {
                 var roomControllers = creep.room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_CONTROLLER } } );
                 // console.log('Creeps Room has '+roomControllers.length+' Spawns available');
-                if(creep.upgradeController(roomControllers[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(roomControllers[0]);
+                var closestController = chooseClosest(roomControllers,creep);
+                if(creep.upgradeController(closestController) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(closestController);
                     // creep.say("goUpgrade");
                 }
                 if ( _.sum(creep.carry) == 0 ) { creep.memory.state = 'Harvest';creep.say('More!');}
@@ -42,6 +44,37 @@ module.exports = {
         }
         //
         // End Switch(state)
+        function chooseClosest(targets,creep) {
+            chosen = targets[0];
+            for(var t in targets) {
+                // console.log(JSON.stringify(targets));
+                // console.log(targets[t]);
+                var r = creep.pos.getRangeTo(targets[t]);
+                if (r < creep.pos.getRangeTo(chosen)) {
+                    chosen = targets[t];
+                }
+            }
+            // console.log(chosen+" is closest");
+            return chosen;
+        }
+        function chooseMostEnergy(targets,creep) {
+            chosen = targets[0];
+            for(var t in targets) {
+                // console.log(JSON.stringify(targets));
+                // console.log(targets[t]);
+                var r = targets[t].energy;
+                var diff = Math.abs(r - targets[t].energy);
+                if (r > chosen.energy && diff > creep.energyCapacity ) {
+                    chosen = targets[t];
+                } else if ( r == chosen.energy) {
+                    chosen = chooseClosest(targets,creep);
+                } else {
+                    chosen = chooseClosest(targets,creep);
+                }
+            }
+            // console.log(chosen+" Has The Most Energy: "+chosen.energy);
+            return chosen;
+        }
     }
     
 };

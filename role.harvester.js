@@ -26,9 +26,17 @@ module.exports = {
                     }
                 } else {
                     // We are FULL.
-                    var roomSpawns = creep.room.find(FIND_MY_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_STORAGE || structure.structureType == STRUCTURE_CONTAINER)  && (structure.energy < structure.energyCapacity || structure.storage < structure.storeCapacity ))}});
-                    // console.log('Creeps Room has '+roomSpawns.length+' Non Full Spawns/Exts available');
+                    var roomSpawns = creep.room.find(FIND_MY_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN )  && (structure.energy < structure.energyCapacity ))}});
+                    var roomContainers = Game.rooms[creep.room.name].find(FIND_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_CONTAINER && structure.store.energy < structure.storeCapacity )) } });
+                    console.log("Containers: "+ roomContainers.length);
+                    for (var p in roomContainers) {
+                        // console.log(roomContainers[p]);
+                        roomSpawns.push(roomContainers[p]);
+                        // console.log ('pushed'+ roomContainers[p]+" For "+roomSpawns.length);
+                    }
+                    console.log("Spawns+Containers+Extensions: "+ roomSpawns.length);
                     var thisOneClosest = chooseClosest(roomSpawns,creep);
+                    console.log(thisOneClosest+" is closest drop. Type: "+thisOneClosest.structureType);
                     if(creep.transfer(thisOneClosest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(thisOneClosest);
                         // creep.say("goSpwnDROP");
