@@ -1,4 +1,4 @@
-// The Upgrader (Alpha)
+// The Upgrader (Beta)
 module.exports = {
     run(creep) {
        //First we import functions

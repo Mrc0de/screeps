@@ -45,6 +45,8 @@ module.exports = {
                 //Do buildNow
                 if (creep.spawning) { break; }
                 var roomConstructionSites = creep.room.find(FIND_MY_CONSTRUCTION_SITES);
+                // console.log("ConSites" + roomConstructionSites.length);
+                if (  roomConstructionSites.length == 0 ) {break;}
                 var thisOneClosest = funcz.chooseClosest(roomConstructionSites,creep);
                 let result = creep.build(thisOneClosest);
                 switch(result) {

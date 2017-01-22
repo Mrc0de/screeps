@@ -8,9 +8,9 @@
  */
 
 module.exports = {
-    distance(thing,verbose) {
-        var report = "";
-        var retVal = null;
+    distance(thingOne,thingTwo,verbose=1) {
+        let report = "___\nThingOne: "+thingOne+"\nThingTwo: "+thingTwo+"\n___";
+        let retVal = thingOne.pos.RangeTo(thingTwo);
         //before return, report if verbose
         if ( verbose ) {
             console.log(report);
@@ -51,59 +51,46 @@ module.exports = {
         console.log(report);
     },
     chooseClosest(targets,creep) {
-        chosen = targets[0];
+        //Choose Closest of target. No Exceptions.
+        let choiceA = targets[0];
+        let choice = choiceA;
         for(var t in targets) {
-            // console.log(JSON.stringify(targets));
-            // console.log(targets[t]);
-            var r = creep.pos.getRangeTo(targets[t].pos);
-            if (r < creep.pos.getRangeTo(chosen).pos) {
-                chosen = targets[t];
-            }
+            if ( targets[t] == choiceA ) { continue;}
+            let choiceB = targets[t];
+            // console.log("~~~\nChoice A: "+choiceA);
+            // console.log("Choice B:"+ choiceB);
+            let rangeA = creep.pos.getRangeTo(choiceA);
+            let rangeB = creep.pos.getRangeTo(choiceB);
+            console.log("Choice A RangeTo Creep: "+rangeA);
+            console.log("Choice B RangeTo Creep: "+rangeB);
+            choice = rangeA < rangeB ? choiceA : choiceB;
+            console.log("Closest is "+ choice+"\n~~~\n");
         }
         // console.log(chosen+" is closest");
-        return chosen;
+        return choice;
     },
     chooseMostEnergy(targets,creep) {
+        //Choose The SOURCE with the Most Energy (does not include containers,etc..)
+        //EXCEPTION: If they are already harvesting here, dont switch until finished (stick to closest)
         var fz = require('functions.inc');
-        chosen = targets[0];
+        let choiceA = targets[0];
+        let choice = choiceA; 
         for(var t in targets) {
-            if ( targets[t].id  == chosen.id   ) {continue;}
-            // console.log(chosen + "vs" + targets[t]);
-            // console.log(JSON.stringify(targets));
-            // console.log(targets[t]);
-            var r = targets[t].energy;
-            var diff = (r - chosen.energy);
-            // console.log("Difference: "+diff);
-            // console.log("r = "+ r+" chosen = "+chosen.energy);
-            
-            if ((r > chosen.energy) && Math.abs(diff) > 50) {
-                
-                if (  _.sum(creep.carry) == 0 ) {
-                    var oldChoice = chosen;
-                    chosen = targets[t];
-                    // console.log(creep.name+": Range To Source: "+ creep.pos.getRangeTo(chosen)  + " vs "+creep.pos.getRangeTo(oldChoice));
-                    // console.log("Choosing: "+chosen+" over " +oldChoice);
-                } else {
-                    //stay here with CLOSEST
-                    var oldChoice = chosen;
-                    chosen = fz.chooseClosest(targets,creep);
-                    // console.log("Staying: "+chosen+" oldChoice: " +oldChoice);
-                }
-                
-            } else if ( r == chosen.energy) {
-                var oldChoice=chosen;
-                chosen = fz.chooseClosest(targets,creep);
-                // console.log("Choosing: "+chosen+" over " +oldChoice+" (EQUAL so Closest)");
-            } else if ( r < chosen.energy) {
-                // chosen = chosen;
-                // console.log("Choosing: "+chosen+" over " +targets[t]+" (Has More)");
-            } else {
-                var oldChoice = chosen;
-                chosen = fz.chooseClosest(targets,creep);
-                // console.log("Choosing: "+chosen+" over " +oldChoice+" (Defaulted to Closest)");
-            }
+            if ( targets[t] == choiceA ) {continue;}
+            let choiceB = targets[t];
+            console.log("---\nChoice A: "+choiceA);
+            console.log("Choice B:"+ choiceB);
+            let energyA = choiceA.energy ;
+            let energyB = choiceB.energy ;
+            let diff = Math.abs(energyA - energyB);
+            console.log("Energy Choice A: "+energyA);
+            console.log("Energy Choice B:"+energyB);
+            console.log("Difference: "+diff);
+            choice = energyA > energyB ? choiceA : choiceB;
+            choice = energyA == energyB ? fz.chooseClosest(targets,creep) : choice;
+            choice = creep.memory.task == 'Harvesting' ? fz.chooseClosest(targets,creep) : choice;
+            console.log("Choosing "+choice+"\n---\n");
         }
-        // console.log(chosen+" Has The Most Energy: "+chosen.energy);
-        return chosen;
+        return choice;
     }
 };
