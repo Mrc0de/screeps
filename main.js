@@ -13,6 +13,8 @@ module.exports.loop = function () {
     var roleUpgrader = require('role.upgrader');
     var baseBuilder = require('role.baseBuilder');
     var spBasic = require('spawnBasic.sp');
+    var funkz = require('functions.inc');
+
     //Collect Roled Creeps
     var harvesters = _.filter( Game.creeps, { memory: {role: 'harvester'} } );
     
@@ -21,6 +23,7 @@ module.exports.loop = function () {
         var cr = Game.creeps[c];
         if(cr.memory.role == 'harvester') {
             roleHarvester.run(cr);
+            // funkz.report(Game.creeps[c]);
         } else if(cr.memory.role == 'upgrader') {
             roleUpgrader.run(cr);
         } else if(cr.memory.role == 'baseBuilder') {
@@ -33,5 +36,7 @@ module.exports.loop = function () {
     for(var s in Game.spawns) {
         spBasic.run(Game.spawns[s]);
     }
+    
+    
     
 }

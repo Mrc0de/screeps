@@ -48,8 +48,8 @@ module.exports = {
             for(var t in targets) {
                 // console.log(JSON.stringify(targets));
                 // console.log(targets[t]);
-                var r = creep.pos.getRangeTo(targets[t]);
-                if (r < creep.pos.getRangeTo(chosen)) {
+                var r = creep.pos.getRangeTo(targets[t].pos);
+                if (r < creep.pos.getRangeTo(chosen).pos) {
                     chosen = targets[t];
                 }
             }
@@ -67,11 +67,14 @@ module.exports = {
                 var diff = (r - chosen.energy);
                 // console.log("Difference: "+diff);
                 // console.log("r = "+ r+" chosen = "+chosen.energy);
+                
                 if ((r > chosen.energy) && Math.abs(diff) > 50) {
-                   if ( _.sum(creep.carry) == 0 ) {
+                    
+                   if ( _.sum(creep.carry) == 0  ) {
                         var oldChoice = chosen;
                         chosen = targets[t];
                         // console.log("Choosing: "+chosen+" over " +oldChoice);
+                        // console.log(creep.name+": Range To Source: "+ creep.pos.getRangeTo(chosen) + " vs "+creep.pos.getRangeTo(oldChoice) );
                     } else {
                         //stay here with CLOSEST
                         var oldChoice = chosen;
