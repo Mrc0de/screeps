@@ -1,108 +1,85 @@
-// The Harvester (Alpha)
+// The Harvester (Beta)
 module.exports = {
     run(creep) {
+        //First we import functions
+        var funcz = require('functions.inc');
         
-        if (!creep.memory['state'] ) {
-            // creep.say('Harvest');
-            creep.memory['state'] = 'Harvest';
-        } else {
-            // creep.say(creep.memory['state']);
-        }
-        var state = creep.memory['state'];
+        //Now init any null memories to defaults for this role
+        if (!creep.memory.state) { creep.memory.state = 'HarvestNow'; }
+        if (!creep.memory.task) { creep.memory.task = 'MoveTo'; }
         
         ////////////////
-        //Overdid it...
-        switch(state) {
-            case 'Harvest': {
-                //Verbosity ftw (and the lag)
-                // console.log(creep.name + " Is Carrying: "+_.sum(creep.carry)+" Total Of Max "+creep.carryCapacity);
+        //State Machinery
+        switch(creep.memory.state ) {
+            case 'HarvestNow': {
+                //Do harvestNow 
+                if (creep.spawning) { break; }
                 if ( _.sum(creep.carry) < creep.carryCapacity ) {
-                    // console.log(creep.name + " NEEDS MORE!");
                     var sources = creep.room.find(FIND_SOURCES);
-                    var thisSource = chooseMostEnergy(sources,creep);
-                    if(creep.harvest(thisSource) == ERR_NOT_IN_RANGE) {
-                       creep.moveTo(thisSource );
-                    //   creep.say("goHarvest");
+                    var thisSource = funcz.chooseMostEnergy(sources,creep);
+                    let result = creep.harvest(thisSource);
+                    switch(result) {
+                        case ERR_NOT_IN_RANGE: {
+                            creep.moveTo(thisSource);
+                            creep.memory.task = 'moveTo';
+                            break;
+                        } 
+                        case ERR_BUSY: {
+                            console.log(creep.name+": Harvest Returned BUSY");
+                            break;
+                        }
+                        case OK: { creep.memory.task = 'Harvesting';break; }
+                        default: {
+                            console.log(creep.name+": Harvest Returned "+result);
+                            break;
+                        }
                     }
                 } else {
                     // We are FULL.
-                    var roomSpawns = creep.room.find(FIND_MY_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN )  && (structure.energy < structure.energyCapacity ))}});
-                    var roomContainers = Game.rooms[creep.room.name].find(FIND_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_CONTAINER && structure.store.energy < structure.storeCapacity )) } });
-                    // console.log("Containers: "+ roomContainers.length);
-                    for (var p in roomContainers) {
-                        // console.log(roomContainers[p]);
-                        roomSpawns.push(roomContainers[p]);
-                        // console.log ('pushed'+ roomContainers[p]+" For "+roomSpawns.length);
-                    }
-                    // console.log("Spawns+Containers+Extensions: "+ roomSpawns.length);
-                    var thisOneClosest = chooseClosest(roomSpawns,creep);
-                    // console.log(thisOneClosest+" is closest drop. Type: "+thisOneClosest.structureType);
-                    if(creep.transfer(thisOneClosest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.memory.state = 'unloadNow';
+                    creep.memory.task = 'moveTo';
+                }
+                break;
+            }
+            case 'unloadNow': {
+                //Do unloadNow
+                if (creep.spawning) { break; }
+                var roomSpawns = creep.room.find(FIND_MY_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN )  && (structure.energy < structure.energyCapacity ))}});
+                var roomContainers = Game.rooms[creep.room.name].find(FIND_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_CONTAINER && structure.store.energy < structure.storeCapacity )) } });
+                for (var p in roomContainers) {
+                    roomSpawns.push(roomContainers[p]);
+                }
+                // console.log("Spawns+Containers+Extensions: "+ roomSpawns.length);
+                var thisOneClosest = funcz.chooseClosest(roomSpawns,creep);
+                // console.log(thisOneClosest+" is closest drop. Type: "+thisOneClosest.structureType);
+                let result = creep.transfer(thisOneClosest, RESOURCE_ENERGY);
+                switch(result) {
+                    case ERR_NOT_IN_RANGE:{
                         creep.moveTo(thisOneClosest);
-                        // creep.say("goSpwnDROP");
-                    } 
-                    
+                        creep.memory.task = 'moveTo';
+                        break;
+                    }
+                    case OK: { creep.memory.task = 'unloading';break;}
+                    case ERR_NOT_ENOUGH_ENERGY: { 
+                        creep.memory.state = 'HarvestNow';
+                        creep.memory.task = 'moveTo';
+                        break;
+                    }
+                    case ERR_BUSY: {
+                        console.log(creep.name+": Transfer Energy To "+thisOneClosest+" Returned BUSY");
+                        break;
+                    }
+                    default: {
+                        console.log(creep.name+": Transfer Energy To "+thisOneClosest+" Returned "+result);
+                        break;
+                    }
                 }
                 break;
             }
         }
         //
         // End Switch(state)
-        function chooseClosest(targets,creep) {
-            chosen = targets[0];
-            for(var t in targets) {
-                // console.log(JSON.stringify(targets));
-                // console.log(targets[t]);
-                var r = creep.pos.getRangeTo(targets[t].pos);
-                if (r < creep.pos.getRangeTo(chosen).pos) {
-                    chosen = targets[t];
-                }
-            }
-            // console.log(chosen+" is closest");
-            return chosen;
-        }
-        function chooseMostEnergy(targets,creep) {
-            chosen = targets[0];
-            for(var t in targets) {
-                if ( targets[t].id  == chosen.id   ) {continue;}
-                // console.log(chosen + "vs" + targets[t]);
-                // console.log(JSON.stringify(targets));
-                // console.log(targets[t]);
-                var r = targets[t].energy;
-                var diff = (r - chosen.energy);
-                // console.log("Difference: "+diff);
-                // console.log("r = "+ r+" chosen = "+chosen.energy);
-                
-                if ((r > chosen.energy) && Math.abs(diff) > 50) {
-                    
-                    if (  _.sum(creep.carry) == 0 ) {
-                        var oldChoice = chosen;
-                        chosen = targets[t];
-                        // console.log(creep.name+": Range To Source: "+ creep.pos.getRangeTo(chosen)  + " vs "+creep.pos.getRangeTo(oldChoice));
-                        // console.log("Choosing: "+chosen+" over " +oldChoice);
-                    } else {
-                        //stay here with CLOSEST
-                        var oldChoice = chosen;
-                        chosen = chooseClosest(targets,creep);
-                        // console.log("Staying: "+chosen+" oldChoice: " +oldChoice);
-                    }
-                    
-                } else if ( r == chosen.energy) {
-                    var oldChoice=chosen;
-                    chosen = chooseClosest(targets,creep);
-                    // console.log("Choosing: "+chosen+" over " +oldChoice+" (EQUAL so Closest)");
-                } else if ( r < chosen.energy) {
-                    // chosen = chosen;
-                    // console.log("Choosing: "+chosen+" over " +targets[t]+" (Has More)");
-                } else {
-                    var oldChoice = chosen;
-                    chosen = chooseClosest(targets,creep);
-                    // console.log("Choosing: "+chosen+" over " +oldChoice+" (Defaulted to Closest)");
-                }
-            }
-            // console.log(chosen+" Has The Most Energy: "+chosen.energy);
-            return chosen;
-        }
-    }
+        
+    } // END Run(creep)
     
 };
