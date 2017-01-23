@@ -55,16 +55,17 @@ module.exports = {
         let choiceA = targets[0];
         let choice = choiceA;
         for(var t in targets) {
+            choiceA = choice;
             if ( targets[t] == choiceA ) { continue;}
             let choiceB = targets[t];
-            // console.log("~~~\nChoice A: "+choiceA);
-            // console.log("Choice B:"+ choiceB);
+            console.log(creep.name+"~~~\n"+creep.name+": Choice A: "+choiceA);
+            console.log(creep.name+": Choice B:"+ choiceB);
             let rangeA = creep.pos.getRangeTo(choiceA);
             let rangeB = creep.pos.getRangeTo(choiceB);
-            // console.log("Choice A RangeTo Creep: "+rangeA);
-            // console.log("Choice B RangeTo Creep: "+rangeB);
+            console.log(creep.name+": Choice A RangeTo Creep: "+rangeA);
+            console.log(creep.name+": Choice B RangeTo Creep: "+rangeB);
             choice = rangeA < rangeB ? choiceA : choiceB;
-            // console.log("Closest is "+ choice+"\n~~~\n");
+            console.log(creep.name+": Closest is "+ choice+"\n~~~\n");
         }
         // console.log(chosen+" is closest");
         return choice;

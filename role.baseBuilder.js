@@ -90,15 +90,15 @@ module.exports = {
                 for (var q in roomStructures) {
                     // console.log(JSON.stringify(roomStructures[q]));
                     // console.log("StructureType: "+roomStructures[q].structureType);
-                    console.log("Health: "+roomStructures[q].hits + " of " + roomStructures[q].hitsMax );
-                    console.log("My? -> "+roomStructures[q].my );
+                    // console.log("Health: "+roomStructures[q].hits + " of " + roomStructures[q].hitsMax );
+                    // console.log("My? -> "+roomStructures[q].my ); //(no these are undef)
                     if ( roomStructures[q].hits < roomStructures[q].hitsMax ) {
                         needRepairs.push(roomStructures[q]);
                     }
                 }
-                console.log("Structures Needing Repairs: "+needRepairs.length);
+                // console.log("Structures Needing Repairs: "+needRepairs.length);
                 
-                var thisOneClosest = funcz.chooseClosest(roomStructures,creep);
+                var thisOneClosest = funcz.chooseClosest(needRepairs,creep);
                 let result = creep.repair(thisOneClosest);
                 switch(result) {
                     case ERR_NOT_IN_RANGE: {
