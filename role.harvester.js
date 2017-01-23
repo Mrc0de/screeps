@@ -49,12 +49,12 @@ module.exports = {
                 for (var p in roomContainers) {
                     roomSpawns.push(roomContainers[p]);
                 }
-                for (var pp in roomSpawns) {
-                    console.log(creep.name+": Structure " + roomSpawns[pp].id+ " - " + roomSpawns[pp].structureType + " Eligible Drop Point.");
-                }
+                // for (var pp in roomSpawns) {
+                    // console.log(creep.name+": Structure " + roomSpawns[pp].id+ " - " + roomSpawns[pp].structureType + " Eligible Drop Point.");
+                // }
                 // console.log("Spawns+Containers+Extensions: "+ roomSpawns.length);
                 var thisOneClosest = funcz.chooseClosest(roomSpawns,creep);
-                console.log(creep.name+": "+ thisOneClosest+" is closest drop. Type: "+thisOneClosest.structureType);
+                // console.log(creep.name+": "+ thisOneClosest+" is closest drop. Type: "+thisOneClosest.structureType);
                 let result = creep.transfer(thisOneClosest, RESOURCE_ENERGY);
                 switch(result) {
                     case ERR_NOT_IN_RANGE:{
