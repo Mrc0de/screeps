@@ -48,10 +48,11 @@ module.exports = {
                 var roomContainers = Game.rooms[creep.room.name].find(FIND_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_CONTAINER && structure.store.energy < structure.storeCapacity )) } });
                 for (var p in roomContainers) {
                     roomSpawns.push(roomContainers[p]);
+                    console.log(creep.name+": Structure " + roomContainers[p].name+ " - " + roomContainers[p].structureType + " Eligible Drop Point.");
                 }
                 // console.log("Spawns+Containers+Extensions: "+ roomSpawns.length);
                 var thisOneClosest = funcz.chooseClosest(roomSpawns,creep);
-                // console.log(thisOneClosest+" is closest drop. Type: "+thisOneClosest.structureType);
+                console.log(thisOneClosest+" is closest drop. Type: "+thisOneClosest.structureType);
                 let result = creep.transfer(thisOneClosest, RESOURCE_ENERGY);
                 switch(result) {
                     case ERR_NOT_IN_RANGE:{

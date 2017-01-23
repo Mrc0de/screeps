@@ -90,12 +90,13 @@ module.exports = {
                 for (var q in roomStructures) {
                     // console.log(JSON.stringify(roomStructures[q]));
                     // console.log("StructureType: "+roomStructures[q].structureType);
-                    // console.log("Health: "+roomStructures[q].hits + " of " + roomStructures[q].hitsMax );
+                    console.log("Health: "+roomStructures[q].hits + " of " + roomStructures[q].hitsMax );
+                    console.log("My? -> "+roomStructures[q].my );
                     if ( roomStructures[q].hits < roomStructures[q].hitsMax ) {
                         needRepairs.push(roomStructures[q]);
                     }
                 }
-                // console.log("Structures Needing Repairs: "+needRepairs.length);
+                console.log("Structures Needing Repairs: "+needRepairs.length);
                 
                 var thisOneClosest = funcz.chooseClosest(roomStructures,creep);
                 let result = creep.repair(thisOneClosest);
