@@ -16,16 +16,16 @@ module.exports = {
             // console.log("Harvesters in this room: "+ harvestersThisRoom);
             // console.log("Upgraders in this room: "+ upgradersThisRoom);
             // console.log("Builders in this room: "+ baseBuildersThisRoom);
-            if ( StructureSpawn.canCreateCreep([WORK,CARRY,CARRY,MOVE,MOVE]) == OK && StructureSpawn.spawning == null && harvestersThisRoom < 6 ) {
+            if ( StructureSpawn.canCreateCreep([WORK,CARRY,CARRY,MOVE,MOVE]) == OK && StructureSpawn.spawning == null && harvestersThisRoom < 10 ) {
                 console.log(StructureSpawn.name +": Creating Harvester Role Creep ("+harvestersThisRoom+ " Exist)");
                 StructureSpawn.createCreep([WORK,CARRY,CARRY,MOVE,MOVE],null,{role:'harvester'});
-            } else if ( StructureSpawn.canCreateCreep([WORK,CARRY,CARRY,MOVE,MOVE]) == OK && StructureSpawn.spawning == null && upgradersThisRoom < 5 ) {
+            } else if ( StructureSpawn.canCreateCreep([WORK,CARRY,CARRY,MOVE,MOVE]) == OK && StructureSpawn.spawning == null && upgradersThisRoom < 2 ) {
                 console.log(StructureSpawn.name +": Creating Upgrader Role Creep");
                 StructureSpawn.createCreep([WORK,CARRY,CARRY,MOVE,MOVE],null,{role:'upgrader'});
-            } else if ( StructureSpawn.canCreateCreep([WORK,MOVE,CARRY,MOVE,MOVE]) == OK && StructureSpawn.spawning == null && baseBuildersThisRoom < 5  ) {
+            } else if ( StructureSpawn.canCreateCreep([WORK,MOVE,CARRY,MOVE,MOVE]) == OK && StructureSpawn.spawning == null && baseBuildersThisRoom < 2  ) {
                 console.log(StructureSpawn.name +": Creating baseBuilder Role Creep");
                 StructureSpawn.createCreep([WORK,MOVE,CARRY,MOVE,MOVE],null,{role:'baseBuilder'});
-            } else if ( StructureSpawn.canCreateCreep([WORK,WORK,CARRY,MOVE,MOVE,MOVE]) == OK && StructureSpawn.spawning == null && baseBuildersThisRoom < 7 ) {
+            } else if ( StructureSpawn.canCreateCreep([WORK,WORK,CARRY,MOVE,MOVE,MOVE]) == OK && StructureSpawn.spawning == null && baseBuildersThisRoom < 2 ) {
                 //baseBuilderTURBO
                 console.log(StructureSpawn.name +": Creating baseBuilder (e400Faster) Role Creep");
                 StructureSpawn.createCreep([WORK,WORK,CARRY,MOVE,MOVE,MOVE],null,{role:'baseBuilder'});
