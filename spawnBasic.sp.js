@@ -11,7 +11,7 @@ module.exports = {
         let maxBaseBuilders = 4;
         if (!StructureSpawn.memory.lastAnnouce) { StructureSpawn.memory.lastAnnouce = Game.time; }
         
-        if ( Game.time > ( StructureSpawn.memory.lastAnnouce + 10 ) ) {
+        if ( Game.time > ( StructureSpawn.memory.lastAnnouce + 12 ) ) {
             console.log("~~~~~\n");
             StructureSpawn.memory.lastAnnouce = Game.time;
             console.log(StructureSpawn.name +": Spawn Report");
@@ -34,17 +34,17 @@ module.exports = {
             console.log("Harvesters in this room: "+ harvestersThisRoom);
             console.log("Upgraders in this room: "+ upgradersThisRoom);
             console.log("Builders in this room: "+ baseBuildersThisRoom);
-            if ( StructureSpawn.canCreateCreep([WORK,CARRY,CARRY,MOVE,MOVE]) == OK && (StructureSpawn.spawning == null && harvestersThisRoom < maxHarvesters && 
-                    upgradersThisRoom > minUpgraders && baseBuildersThisRoom > minBaseBuilders) || StructureSpawn.canCreateCreep([WORK,CARRY,CARRY,MOVE,MOVE]) == OK && harvestersThisRoom < minHarvesters ) {
+            if ( StructureSpawn.canCreateCreep([WORK,CARRY,CARRY,MOVE,MOVE,MOVE]) == OK && (StructureSpawn.spawning == null && harvestersThisRoom < maxHarvesters && 
+                    upgradersThisRoom > minUpgraders && baseBuildersThisRoom > minBaseBuilders) || StructureSpawn.canCreateCreep([WORK,CARRY,CARRY,MOVE,MOVE,MOVE]) == OK && harvestersThisRoom < minHarvesters ) {
                 console.log(StructureSpawn.name +": Creating Harvester Role Creep ("+harvestersThisRoom+ " Exist)");
-                StructureSpawn.createCreep([WORK,CARRY,CARRY,MOVE,MOVE],null,{role:'harvester'});
-            } else if ( StructureSpawn.canCreateCreep([WORK,CARRY,CARRY,MOVE,MOVE]) == OK && StructureSpawn.spawning == null && upgradersThisRoom < maxUpgraders &&
+                StructureSpawn.createCreep([WORK,CARRY,CARRY,MOVE,MOVE,MOVE],null,{role:'harvester'});
+            } else if ( StructureSpawn.canCreateCreep([WORK,CARRY,CARRY,MOVE,MOVE,MOVE]) == OK && StructureSpawn.spawning == null && upgradersThisRoom < maxUpgraders &&
                     baseBuildersThisRoom > minBaseBuilders ) {
                 console.log(StructureSpawn.name +": Creating Upgrader Role Creep");
-                StructureSpawn.createCreep([WORK,CARRY,CARRY,MOVE,MOVE],null,{role:'upgrader'});
-            } else if ( StructureSpawn.canCreateCreep([WORK,CARRY,CARRY,MOVE,MOVE]) == OK && StructureSpawn.spawning == null && baseBuildersThisRoom < maxBaseBuilders ) {
+                StructureSpawn.createCreep([WORK,CARRY,CARRY,MOVE,MOVE,MOVE],null,{role:'upgrader'});
+            } else if ( StructureSpawn.canCreateCreep([WORK,CARRY,CARRY,MOVE,MOVE,MOVE]) == OK && StructureSpawn.spawning == null && baseBuildersThisRoom < maxBaseBuilders ) {
                 console.log(StructureSpawn.name +": Creating baseBuilder Role Creep");
-                StructureSpawn.createCreep([WORK,CARRY,CARRY,MOVE,MOVE],null,{role:'baseBuilder'});
+                StructureSpawn.createCreep([WORK,CARRY,CARRY,MOVE,MOVE,MOVE],null,{role:'baseBuilder'});
             } else {
                 console.log("Total Available Energy: " + StructureSpawn.room.energyAvailable);
                 console.log("Currently Spawning: "+ StructureSpawn.spawning );

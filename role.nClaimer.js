@@ -10,10 +10,13 @@ module.exports = {
         if (!creep.memory.state) { creep.memory.state = 'SeekDirectionExit'; }
         if (!creep.memory.task) { creep.memory.task = 'MoveTo'; }
         let goToRoom = creep.room.name;
-        if ( creep.room.find(FIND_MY_STRUCTURES{ filter: (structure) => { return (( structure.structureType == STRUCTURE_SPAWN ))}}) ) {
+        if ( creep.room.find(FIND_MY_STRUCTURES{ filter: (structure) => { return (( structure.structureType == STRUCTURE_CONTROLLER ))}}).length > 0 ) {
             goToRoom = creep.room.describeExits(creep.room.name)[creep.memory.direction];
             console.log("Room To The "+creep.memory.direction+" is "+goToRoom);
-        } else {
+        } else if ( creep.room.find(FIND_HOSTILE_STRUCTURES{ filter: (structure) => { return (( structure.structureType == STRUCTURE_CONTROLLER ))}}).length > 0 ) { 
+            goToRoom = creep.room.describeExits(creep.room.name)[creep.memory.direction];
+            console.log("Room To The "+creep.memory.direction+" is "+goToRoom + " [HOSTILES DETECTED IN "+ creep.room.name +"]");
+        } else { 
             //Nothing.. claim this place or leave
         }
         ////////////////
@@ -50,6 +53,7 @@ module.exports = {
             case 'findNextRoom': {
                 goToRoom = creep.room.describeExits(creep.room.name)[creep.memory.direction];
                 console.log("Room To The "+creep.memory.direction+" is "+goToRoom);
+                creep.memory.state = 'SeekDirectionExit';
                 break;
             }
         }
