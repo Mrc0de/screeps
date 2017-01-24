@@ -110,6 +110,10 @@ module.exports = {
                         console.log(creep.name+": Repair Returned BUSY");
                         break;
                     }
+                    case ERR_INVALID_TARGET: {
+                        console.log(creep.name+": Repair Returned ERR_INVALID_TARGET for"+thisOneClosest);
+                        break;
+                    }
                     case ERR_NOT_ENOUGH_ENERGY: { 
                         creep.memory.state = 'TransferNow';
                         creep.memory.task = 'moveTo';

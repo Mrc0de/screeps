@@ -37,6 +37,4 @@ module.exports.loop = function () {
         spBasic.run(Game.spawns[s]);
     }
     
-    
-    
 }

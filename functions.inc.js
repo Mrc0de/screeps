@@ -1,12 +1,4 @@
-/*
- * Module code goes here. Use 'module.exports' to export things:
- * module.exports.thing = 'a thing';
- *
- * You can import it from another modules like this:
- * var mod = require('functions.inc');
- * mod.thing == 'a thing'; // true
- */
-
+// Functions.inc
 module.exports = {
     distance(thingOne,thingTwo,verbose=0) {
         let report = "___\nThingOne: "+thingOne+"\nThingTwo: "+thingTwo+"\n___";
