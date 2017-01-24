@@ -21,7 +21,7 @@ module.exports = {
             let dedCreepz = "CreepName -> TicksToLive\n";
             let cnt = 1;
             for(var creepz in Game.creeps) {
-                if ( creepz.spawning ) { continue;}
+                if ( Game.creeps[creepz].spawning ) { continue;}
                 dedCreepz += creepz +" -> " +Game.creeps[creepz].ticksToLive + "\t";
                 if ( !(cnt % 6) ) { dedCreepz += "\n"; }
                 cnt++;
