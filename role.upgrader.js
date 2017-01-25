@@ -16,7 +16,7 @@ module.exports = {
                 if ( _.sum(creep.carry) < creep.carryCapacity) {
                     // console.log(creep.name + " Empty!");
                     var sources = creep.room.find(FIND_SOURCES);
-                    var bestSource = funcz.chooseMostEnergy(sources,creep);
+                    var bestSource = funcz.chooseLeastEnergy(sources,creep);
                     var roomContainers = Game.rooms[creep.room.name].find(FIND_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_CONTAINER && structure.store.energy > 50 )) } });
                     // console.log("Containers: "+ roomContainers.length);
                     roomContainers.push(bestSource);
@@ -26,7 +26,7 @@ module.exports = {
                         let result = creep.harvest(bestest);
                         switch(result){
                             case ERR_NOT_IN_RANGE:{
-                                creep.moveTo(bestest);
+                                creep.moveTo(bestest,{reusePath:10});
                                 break;
                             }
                             case ERR_BUSY: {
@@ -43,7 +43,7 @@ module.exports = {
                         let result = bestest.transfer(creep,RESOURCE_ENERGY);
                         switch(result){
                             case ERR_NOT_IN_RANGE:{
-                                creep.moveTo(bestest);
+                                creep.moveTo(bestest,{reusePath:10});
                                 break;
                             }
                             case ERR_BUSY: {
@@ -72,7 +72,7 @@ module.exports = {
                 let result = creep.upgradeController(closestController);
                 switch(result){
                     case ERR_NOT_IN_RANGE:{
-                        creep.moveTo(closestController);
+                        creep.moveTo(closestController,{reusePath:10});
                         break;
                     }
                     case ERR_NOT_ENOUGH_ENERGY: { 

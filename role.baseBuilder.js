@@ -16,13 +16,13 @@ module.exports = {
                 //Builders may now only get their energy from CONTAINERS (and later storages)
                 if (creep.spawning) { break; }
                 if ( _.sum(creep.carry) < creep.carryCapacity ) {
-                    var roomContainers = Game.rooms[creep.room.name].find(FIND_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_CONTAINER && structure.store.energy > 0 )) } });
+                    var roomContainers = Game.rooms[creep.room.name].find(FIND_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_CONTAINER && structure.store.energy > 0 || (structure.structureType == STRUCTURE_STORAGE && structure.store.energy > 0 ) )) } });
                     if ( roomContainers.length == 0 ) { break; }
                     var thisSource = funcz.chooseClosest(roomContainers,creep);
                     let result = thisSource.transfer(creep,RESOURCE_ENERGY);
                     switch(result) {
                         case ERR_NOT_IN_RANGE: {
-                            creep.moveTo(thisSource);
+                            creep.moveTo(thisSource,{reusePath:10});
                             creep.memory.task = 'moveTo';
                             break;
                         } 
@@ -53,7 +53,7 @@ module.exports = {
                 let result = creep.build(thisOneClosest);
                 switch(result) {
                     case ERR_NOT_IN_RANGE: {
-                        creep.moveTo(thisOneClosest);
+                        creep.moveTo(thisOneClosest,{reusePath:10});
                         creep.memory.task = 'moveTo';
                         break;
                     } 
@@ -80,7 +80,7 @@ module.exports = {
                 if (creep.spawning) { break; }
                 var roomStructures = creep.room.find(FIND_MY_STRUCTURES);
                 // console.log("Structures: " + roomStructures.length);
-                var roomContainers = Game.rooms[creep.room.name].find(FIND_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_CONTAINER )) } });
+                var roomContainers = Game.rooms[creep.room.name].find(FIND_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_CONTAINER || (structure.structureType == STRUCTURE_STORAGE ))) } });
                 for (var psh in roomContainers ) {
                     roomStructures.push(roomContainers[psh]);
                 }
@@ -102,7 +102,7 @@ module.exports = {
                 let result = creep.repair(thisOneClosest);
                 switch(result) {
                     case ERR_NOT_IN_RANGE: {
-                        creep.moveTo(thisOneClosest);
+                        creep.moveTo(thisOneClosest,{reusePath:10});
                         creep.memory.task = 'moveTo';
                         break;
                     } 

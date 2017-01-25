@@ -20,7 +20,7 @@ module.exports = {
                     let result = creep.harvest(thisSource);
                     switch(result) {
                         case ERR_NOT_IN_RANGE: {
-                            creep.moveTo(thisSource);
+                            creep.moveTo(thisSource,{reusePath:10});
                             creep.memory.task = 'moveTo';
                             break;
                         } 
@@ -45,7 +45,7 @@ module.exports = {
                 //Do unloadNow
                 if (creep.spawning) { break; }
                 var roomSpawns = creep.room.find(FIND_MY_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN )  && (structure.energy < structure.energyCapacity ))}});
-                var roomContainers = Game.rooms[creep.room.name].find(FIND_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_CONTAINER && structure.store.energy < structure.storeCapacity )) } });
+                var roomContainers = Game.rooms[creep.room.name].find(FIND_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_CONTAINER && structure.store.energy < structure.storeCapacity ) || (structure.structureType == STRUCTURE_STORAGE && structure.store.energy < structure.storeCapacity )) } });
                 for (var p in roomContainers) {
                     roomSpawns.push(roomContainers[p]);
                 }
@@ -58,7 +58,7 @@ module.exports = {
                 let result = creep.transfer(thisOneClosest, RESOURCE_ENERGY);
                 switch(result) {
                     case ERR_NOT_IN_RANGE:{
-                        creep.moveTo(thisOneClosest);
+                        creep.moveTo(thisOneClosest,{reusePath:10});
                         creep.memory.task = 'moveTo';
                         break;
                     }
