@@ -6,9 +6,9 @@ module.exports = {
         let minHarvesters = 5;
         let minUpgraders = 2;
         let minBaseBuilders = 2;
-        let maxHarvesters = 12;
-        let maxUpgraders = 4;
-        let maxBaseBuilders = 4;
+        let maxHarvesters = 16;
+        let maxUpgraders = 8;
+        let maxBaseBuilders = 8;
         if (!StructureSpawn.memory.lastAnnouce) { StructureSpawn.memory.lastAnnouce = Game.time; }
         
         let bodies = {
@@ -42,7 +42,7 @@ module.exports = {
             console.log("Upgraders in this room: "+ upgradersThisRoom);
             console.log("Builders in this room: "+ baseBuildersThisRoom);
             if ( StructureSpawn.canCreateCreep(bodies['HARVEST1']) == OK && (StructureSpawn.spawning == null && harvestersThisRoom < maxHarvesters && 
-                    upgradersThisRoom > minUpgraders && baseBuildersThisRoom > minBaseBuilders) || StructureSpawn.canCreateCreep([WORK,CARRY,CARRY,MOVE,MOVE,MOVE]) == OK && harvestersThisRoom < minHarvesters ) {
+                    upgradersThisRoom > minUpgraders && baseBuildersThisRoom > minBaseBuilders) || StructureSpawn.canCreateCreep(bodies['HARVEST1']) == OK && harvestersThisRoom < minHarvesters ) {
                 console.log(StructureSpawn.name +": Creating Harvester Role Creep ("+harvestersThisRoom+ " Exist)");
                 StructureSpawn.createCreep(bodies['HARVEST1'],null,{role:'harvester'});
             } else if ( StructureSpawn.canCreateCreep(bodies['UPGRADE1']) == OK && StructureSpawn.spawning == null && upgradersThisRoom < maxUpgraders &&

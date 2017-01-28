@@ -66,6 +66,8 @@ module.exports = {
             }
             case 'upgradeController': {
                 if (creep.spawning) { break; }
+                var roomTowers = creep.room.find(FIND_MY_STRUCTURES, { filter: (structure) => { return ( structure.structureType == STRUCTURE_TOWER && structure.energy < (structure.energyCapacity * 0.75 ))} } );
+                if ( roomTowers.length > 0 ) { creep.memory.state = 'FillTower'; creep.memory.task = 'moveTo'; }
                 var roomControllers = creep.room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_CONTROLLER } } );
                 // console.log('Creeps Room has '+roomControllers.length+' Spawns available');
                 var closestController = funcz.chooseClosest(roomControllers,creep);
@@ -92,6 +94,34 @@ module.exports = {
                 }
                 if ( _.sum(creep.carry) == 0 ) { creep.memory.state = 'HarvestNow';creep.say('More!');}
                 break;
+            }
+            case 'FillTower': {
+                if (creep.spawning) { break; }
+                var roomTowers = creep.room.find(FIND_MY_STRUCTURES, { filter: (structure) => { return ( structure.structureType == STRUCTURE_TOWER && structure.energy < (structure.energyCapacity * 0.75 ))} } );
+                var closestTower = funcz.chooseClosest(roomTowers,creep);
+                let result = creep.transfer(closestTower,RESOURCE_ENERGY);
+                switch(result){
+                    case ERR_NOT_IN_RANGE:{
+                        creep.moveTo(closestTower,{reusePath:10});
+                        break;
+                    }
+                    case ERR_NOT_ENOUGH_ENERGY: { 
+                        creep.memory.state = 'HarvestNow';
+                        creep.memory.task = 'moveTo';
+                        break;
+                    }
+                    case ERR_BUSY: {
+                        console.log(creep.name+": Filling Tower "+closestTower+" Returned BUSY");
+                        break;
+                    }
+                    case OK: { creep.memory.task = 'FillingTower';break; }
+                    default: {
+                        console.log(creep.name+": Filling Tower "+closestTower+" Returned "+result);
+                        break;
+                    }
+                }
+                if ( _.sum(creep.carry) == 0 ) { creep.memory.state = 'HarvestNow';creep.say('More!');}
+                break;   
             }
         }
         //

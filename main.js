@@ -7,7 +7,15 @@ module.exports.loop = function () {
             // Game.notify('Buried ' + name + '. They were dead.',5);
         }
     }
-    
+    for(var r in Game.rooms ) {
+        var roomTowers = Game.rooms[r].find(FIND_MY_STRUCTURES, { filter: (structure) => { return ( structure.structureType == STRUCTURE_TOWER )} } );
+        for (var t in roomTowers) {
+            var closestHostile = roomTowers[t].pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+            if(closestHostile) {
+                roomTowers[t].attack(closestHostile);
+            }
+        }
+    }
     var _ = require('lodash');
     //declare role definitions
     var roleHarvester = require('role.harvester');

@@ -81,23 +81,29 @@ module.exports = {
                 var roomStructures = creep.room.find(FIND_MY_STRUCTURES);
                 // console.log("Structures: " + roomStructures.length);
                 var roomContainers = Game.rooms[creep.room.name].find(FIND_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_CONTAINER || (structure.structureType == STRUCTURE_STORAGE ))) } });
+                var roomRoads = Game.rooms[creep.room.name].find(FIND_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_ROAD )) } });
                 for (var psh in roomContainers ) {
+                    roomStructures.push(roomContainers[psh]);
+                }
+                for (var psh in roomRoads ) {
                     roomStructures.push(roomContainers[psh]);
                 }
                 // console.log("Containers: " + roomContainers.length);
                 // console.log("Total: "+roomStructures.length);
                 let needRepairs = [];
+                if (roomStructures.length == 0) { break;}
                 for (var q in roomStructures) {
                     // console.log(JSON.stringify(roomStructures[q]));
                     // console.log("StructureType: "+roomStructures[q].structureType);
                     // console.log("Health: "+roomStructures[q].hits + " of " + roomStructures[q].hitsMax );
                     // console.log("My? -> "+roomStructures[q].my ); //(no these are undef)
-                    if ( roomStructures[q].hits < roomStructures[q].hitsMax ) {
+                if ( !roomStructures[q].hits ) { continue; }
+                    if ( roomStructures[q].hits < (roomStructures[q].hitsMax * 0.75) ) {
                         needRepairs.push(roomStructures[q]);
                     }
                 }
                 // console.log("Structures Needing Repairs: "+needRepairs.length);
-                
+                if (needRepairs.length == 0) { break;}
                 var thisOneClosest = funcz.chooseClosest(needRepairs,creep);
                 let result = creep.repair(thisOneClosest);
                 switch(result) {
@@ -112,6 +118,8 @@ module.exports = {
                     }
                     case ERR_INVALID_TARGET: {
                         console.log(creep.name+": Repair Returned ERR_INVALID_TARGET for"+thisOneClosest);
+                        creep.memory.state = "BuildNow";
+                        creep.memory.task = 'moveTo';
                         break;
                     }
                     case ERR_NOT_ENOUGH_ENERGY: { 

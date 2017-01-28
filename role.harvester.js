@@ -45,7 +45,10 @@ module.exports = {
                 //Do unloadNow
                 if (creep.spawning) { break; }
                 var roomSpawns = creep.room.find(FIND_MY_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN )  && (structure.energy < structure.energyCapacity ))}});
-                var roomContainers = Game.rooms[creep.room.name].find(FIND_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_CONTAINER && structure.store.energy < structure.storeCapacity ) || (structure.structureType == STRUCTURE_STORAGE && structure.store.energy < structure.storeCapacity )) } });
+                let roomContainers;
+                if ( creep.room.energyAvailable > (creep.room.energyCapacity * 0.75 ) ) {               
+                    roomContainers = Game.rooms[creep.room.name].find(FIND_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_CONTAINER && structure.store.energy < structure.storeCapacity ) || (structure.structureType == STRUCTURE_STORAGE && structure.store.energy < structure.storeCapacity )) } });
+                }
                 for (var p in roomContainers) {
                     roomSpawns.push(roomContainers[p]);
                 }
