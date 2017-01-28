@@ -9,7 +9,7 @@ module.exports = {
         let maxHarvesters = 16;
         let maxUpgraders = 8;
         let maxBaseBuilders = 8;
-        if (!StructureSpawn.memory.lastAnnouce) { StructureSpawn.memory.lastAnnouce = Game.time; }
+        if (!StructureSpawn.memory.lastAnnounce) { StructureSpawn.memory.lastAnnounce = Game.time; }
         
         let bodies = {
             HARVEST1:[WORK,CARRY,MOVE],
@@ -18,13 +18,12 @@ module.exports = {
         }
     
         
-        if ( Game.time > ( StructureSpawn.memory.lastAnnouce + 6 ) ) {
+        if ( Game.time > ( StructureSpawn.memory.lastAnnounce + 6 ) ) {
             console.log("~~~~~\n");
             StructureSpawn.memory.lastAnnouce = Game.time;
             console.log(StructureSpawn.name +": Spawn Report");
             console.log(StructureSpawn.name +": Energy/Max - "+StructureSpawn.energy+'/'+StructureSpawn.energyCapacity);
             console.log("Total Available Energy (Extensions): " + StructureSpawn.room.energyAvailable);
-            console.log(StructureSpawn.name +": Full");
             let dedCreepz = "CreepName -> TicksToLive\n";
             let cnt = 1;
             for(var creepz in Game.creeps) {

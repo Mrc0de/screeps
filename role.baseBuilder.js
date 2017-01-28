@@ -17,7 +17,7 @@ module.exports = {
                 if (creep.spawning) { break; }
                 if ( _.sum(creep.carry) < creep.carryCapacity ) {
                     var roomContainers = Game.rooms[creep.room.name].find(FIND_STRUCTURES, { filter: (structure) => { return ((structure.structureType == STRUCTURE_CONTAINER && structure.store.energy > 0 || (structure.structureType == STRUCTURE_STORAGE && structure.store.energy > 0 ) )) } });
-                    if ( roomContainers.length == 0 ) { break; }
+                    if ( roomContainers.length == 0 ) { creep.memory.state = 'HuddleNow'; break; }
                     var thisSource = funcz.chooseClosest(roomContainers,creep);
                     let result = thisSource.transfer(creep,RESOURCE_ENERGY);
                     switch(result) {
@@ -134,6 +134,14 @@ module.exports = {
                     }
                 }
                 if ( _.sum(creep.carry) == 0 ) { creep.memory.state = 'TransferNow';creep.say('I\'m Empty!');}
+                break;
+            }
+            case 'HuddleNow': {
+                //Do RepairNow
+                if (creep.spawning) { break; }
+                if ( !Game.flags['huddle'] ) { creep.memory.state = 'TransferNow'; }
+                let result = creep.moveTo(Game.flags['huddle']);
+                if ( _.sum(creep.carry) == 0 ) { creep.memory.state = 'TransferNow';}
                 break;
             }
             default: { creep.memory.state = 'TransferNow';break;}
